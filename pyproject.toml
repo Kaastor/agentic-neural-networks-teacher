@@ -15,6 +15,7 @@ python = "^3.11"
 fastapi = "^0.116.2"
 uvicorn = { extras = ["standard"], version = "^0.24.0" }
 setuptools = ">=78.1.1"
+sympy = "^1.12"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^7.4.0"
@@ -24,6 +25,7 @@ black = "^24.3.0"
 mypy = "^1.6.1"
 pre-commit = "^3.4.0"
 httpx = "^0.25.0"
+numpy = "^2.1"
 
 [tool.pytest.ini_options]
 testpaths = ["app/tests"]
