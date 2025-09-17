@@ -1,1 +1,1 @@
-# road-to-ai-applied-engineer
+# agentic-neural-networks-teacher
