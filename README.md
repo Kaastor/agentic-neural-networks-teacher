@@ -6,6 +6,7 @@ Agentic tutoring platform that delivers a deep backpropagation curriculum with v
 
 - **Milestone 0** – scaffolding ✅
 - **Milestone 1** – curriculum graph and canonical content ✅
+- **Milestone 3** – agent graph thin slice (Planner → Tutor → Assessor → Critic) ✅
 
 ## Local development
 
@@ -20,6 +21,7 @@ poetry run uvicorn services.api.main:app --reload
 - `GET /hello-agent` – milestone 0 agent example
 - `GET /concept/{concept_id}` – fully expanded concept payload (sections, objectives, facts, examples, templates)
 - `GET /facts?ids=...` – canonical fact lookup (requires one or more `ids` query parameters)
+- `POST /session/thin-slice` – execute the backprop thin-slice session and return the structured transcript
 
 ## Tests
 

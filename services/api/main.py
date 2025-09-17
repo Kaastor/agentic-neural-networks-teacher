@@ -7,6 +7,7 @@ from typing import Annotated
 from fastapi import FastAPI, HTTPException, Query
 
 from app.agents.hello_agent import HelloAgent, HelloAgentRequest, HelloAgentResponse
+from app.agents.session import LearnerProfile, SessionOrchestrator, SessionTranscript
 from app.content import CONTENT_REPOSITORY, CanonicalFact, ConceptDetail
 
 app = FastAPI(
@@ -16,6 +17,7 @@ app = FastAPI(
 )
 
 _hello_agent = HelloAgent()
+_session_orchestrator = SessionOrchestrator()
 
 
 @app.get("/healthz")
@@ -53,3 +55,10 @@ def get_canonical_facts(ids: FactsQuery) -> list[CanonicalFact]:
     if not facts:
         raise HTTPException(status_code=404, detail="No canonical facts found for supplied ids.")
     return facts
+
+
+@app.post("/session/thin-slice", response_model=SessionTranscript)
+def run_thin_slice_session(profile: LearnerProfile) -> SessionTranscript:
+    """Execute the milestone three thin-slice session and return the transcript."""
+
+    return _session_orchestrator.run_thin_slice(profile)
