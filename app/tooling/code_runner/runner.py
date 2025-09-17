@@ -7,9 +7,9 @@ import resource
 import subprocess
 import sys
 import time
+from collections.abc import Callable
 from pathlib import Path
 from tempfile import TemporaryDirectory
-from typing import Callable
 
 from app.tooling.code_runner.models import CodeArtifact, CodeRunRequest, CodeRunResponse
 
@@ -36,6 +36,16 @@ def _truncate_output(stream: str, limit_kb: int) -> tuple[str, bool]:
     truncated = encoded[:limit_bytes]
     decoded = truncated.decode("utf-8", errors="ignore")
     return f"{decoded}\n[truncated]", True
+
+
+def _coerce_text(stream: bytes | str | None) -> str:
+    """Normalize subprocess output into a UTF-8 string for downstream processing."""
+
+    if stream is None:
+        return ""
+    if isinstance(stream, bytes):
+        return stream.decode("utf-8", errors="replace")
+    return stream
 
 
 def _set_resource_limits(request: CodeRunRequest) -> Callable[[], None]:
@@ -116,8 +126,10 @@ def run_code(request: CodeRunRequest) -> CodeRunResponse:
                 preexec_fn=_set_resource_limits(request),
             )
             runtime = time.monotonic() - start
-            stdout, stdout_truncated = _truncate_output(completed.stdout or "", limits.stdout_limit_kb)
-            stderr, stderr_truncated = _truncate_output(completed.stderr or "", limits.stdout_limit_kb)
+            stdout_raw = _coerce_text(completed.stdout)
+            stdout, stdout_truncated = _truncate_output(stdout_raw, limits.stdout_limit_kb)
+            stderr_raw = _coerce_text(completed.stderr)
+            stderr, stderr_truncated = _truncate_output(stderr_raw, limits.stdout_limit_kb)
             artifacts = _collect_artifacts(artifacts_dir)
             return CodeRunResponse(
                 exit_code=completed.returncode,
@@ -131,8 +143,10 @@ def run_code(request: CodeRunRequest) -> CodeRunResponse:
             )
         except subprocess.TimeoutExpired as exc:
             runtime = time.monotonic() - start
-            stdout, stdout_truncated = _truncate_output(exc.stdout or "", limits.stdout_limit_kb)
-            stderr_message = (exc.stderr or "") + "\n[terminated: wall-clock timeout exceeded]"
+            stdout_raw = _coerce_text(exc.stdout)
+            stdout, stdout_truncated = _truncate_output(stdout_raw, limits.stdout_limit_kb)
+            stderr_base = _coerce_text(exc.stderr)
+            stderr_message = f"{stderr_base}\n[terminated: wall-clock timeout exceeded]"
             stderr, stderr_truncated = _truncate_output(stderr_message, limits.stdout_limit_kb)
             artifacts = _collect_artifacts(artifacts_dir)
             return CodeRunResponse(

@@ -4,11 +4,11 @@ from __future__ import annotations
 
 import math
 import random
-from typing import Iterable, Sequence
+from collections.abc import Iterable, Sequence
 
-import sympy
+import sympy  # type: ignore[import-untyped]
 from sympy import Matrix
-from sympy.parsing.sympy_parser import parse_expr
+from sympy.parsing.sympy_parser import parse_expr  # type: ignore[import-untyped]
 
 from app.tooling.math.models import (
     DerivativeCheckRequest,

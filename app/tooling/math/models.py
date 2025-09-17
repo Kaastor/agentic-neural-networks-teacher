@@ -44,7 +44,8 @@ class DerivativeCheckRequest(BaseModel):
         ..., min_length=1, description="Ordered variables the Jacobian is taken with respect to."
     )
     candidate: list[list[str]] = Field(
-        ..., description="Learner-supplied Jacobian components aligned with function × variables.",
+        ...,
+        description="Learner-supplied Jacobian components aligned with function × variables.",
     )
     evaluation_point: dict[str, float] | None = Field(
         default=None,
@@ -58,7 +59,7 @@ class DerivativeCheckRequest(BaseModel):
     )
 
     @model_validator(mode="after")
-    def validate_candidate_shape(self) -> "DerivativeCheckRequest":
+    def validate_candidate_shape(self) -> DerivativeCheckRequest:
         """Ensure the candidate Jacobian matches the expected dimensions."""
 
         expected_rows = len(self.function)
@@ -82,7 +83,9 @@ class DerivativeCheckRequest(BaseModel):
 class DerivativeCheckResponse(BaseModel):
     """Result of the Jacobian verification."""
 
-    equivalent: bool = Field(..., description="True when the supplied Jacobian matches the reference.")
+    equivalent: bool = Field(
+        ..., description="True when the supplied Jacobian matches the reference."
+    )
     detail: str = Field(..., description="Explanation of the verification verdict.")
     symbolic_difference: list[list[str]] = Field(
         default_factory=list,

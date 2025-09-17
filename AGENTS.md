@@ -23,6 +23,8 @@
 
 ## Test & Verify
 
+- **Full local gate:**  
+  `./scripts/run_quality_checks.sh`  _(runs Ruff → Black --check → mypy → pytest via Poetry)_
 - **All tests:**  
   `poetry run python -m pytest`
 - **Single test example:**  
@@ -160,8 +162,8 @@
    - Keep functions focused; prefer composition.
    - Update/add tests for new behavior.
 4. **Verify locally:**
-   - `poetry run python -m pytest`
-   - (if configured) `poetry run mypy .`, `poetry run ruff check .`, `poetry run black . --check`
+   - Prefer `./scripts/run_quality_checks.sh`
+   - When troubleshooting, run individual tools: `poetry run python -m pytest`, `poetry run mypy .`, `poetry run ruff check .`, `poetry run black . --check`
 5. **Final checks:**
    - Ensure logging is appropriate; remove debug-only statements.
    - Confirm error handling and input validation.

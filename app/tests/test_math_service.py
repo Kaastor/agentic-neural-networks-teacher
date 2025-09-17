@@ -2,11 +2,12 @@
 
 from __future__ import annotations
 
+from typing import cast
+
 import numpy as np
 from fastapi.testclient import TestClient
 
 from services.math_service.main import app
-
 
 client = TestClient(app)
 
@@ -105,15 +106,14 @@ def test_mlp_gradient_matches_numerical_check() -> None:
 
     def forward(vec: np.ndarray) -> np.ndarray:
         hidden = np.tanh(w1 @ vec + b1)
-        return w2 @ hidden + b2
+        return cast(np.ndarray, w2 @ hidden + b2)
 
     def analytic_jacobian(vec: np.ndarray) -> np.ndarray:
         pre_activation = w1 @ vec + b1
         diag = np.diag(1.0 - np.tanh(pre_activation) ** 2)
-        return w2 @ diag @ w1
+        return cast(np.ndarray, w2 @ diag @ w1)
 
     def numerical_jacobian(vec: np.ndarray, epsilon: float = 1e-5) -> np.ndarray:
-        base = forward(vec)
         jac = np.zeros((2, 2))
         for i in range(vec.size):
             perturb = np.zeros_like(vec)
