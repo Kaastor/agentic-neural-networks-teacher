@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from typing import Annotated
+
 from fastapi import FastAPI, HTTPException, Query
 
 from app.agents.hello_agent import HelloAgent, HelloAgentRequest, HelloAgentResponse
@@ -40,8 +42,11 @@ def get_concept(concept_id: str) -> ConceptDetail:
     return detail
 
 
+FactsQuery = Annotated[list[str], Query(min_items=1)]
+
+
 @app.get("/facts", response_model=list[CanonicalFact])
-def get_canonical_facts(ids: list[str] = Query(default=..., min_items=1)) -> list[CanonicalFact]:
+def get_canonical_facts(ids: FactsQuery) -> list[CanonicalFact]:
     """Return canonical facts for the supplied identifiers."""
 
     facts = CONTENT_REPOSITORY.get_canonical_facts(ids)

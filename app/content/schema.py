@@ -6,7 +6,6 @@ from typing import Literal
 
 from pydantic import BaseModel, Field
 
-
 DifficultyLevel = Literal["introductory", "intermediate", "advanced", "challenge"]
 ProblemType = Literal["conceptual", "derivation", "numerical", "coding", "analysis"]
 BloomLevel = Literal[
