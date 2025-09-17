@@ -114,7 +114,8 @@ class PlannerDecision(BaseMessage):
         description="Problem template identifier when the action requires assessment.",
     )
     variant_id: str | None = Field(
-        default=None, description="Deterministic problem variant identifier.")
+        default=None, description="Deterministic problem variant identifier."
+    )
     derivation_target: DerivationTarget | None = Field(
         default=None,
         description="Target used when verifying symbolic derivations.",
@@ -140,7 +141,8 @@ class TutorResponse(BaseMessage):
 
     sender: AgentNode = Field(default=AgentNode.TUTOR)
     response_type: TutorResponseType = Field(
-        ..., description="Indicates whether the tutor performed a turn or requested facts.",
+        ...,
+        description="Indicates whether the tutor performed a turn or requested facts.",
     )
     prompt: str | None = Field(
         default=None,
@@ -178,8 +180,7 @@ class GradingDetail(BaseModel):
         default=None,
         description="Rubric text used during evaluation when applicable.",
     )
-    notes: str | None = Field(
-        default=None, description="Assessor free-form notes or hints.")
+    notes: str | None = Field(default=None, description="Assessor free-form notes or hints.")
 
 
 class AssessmentResult(BaseMessage):
@@ -250,4 +251,3 @@ class SessionTranscript(BaseModel):
         default_factory=list, description="Ordered collection of completed turns."
     )
     final_state: LearnerState = Field(..., description="Learner state after the session.")
-

@@ -32,7 +32,9 @@ class AssessorAgent:
                 "Canonical solution: "
                 f"{problem.solution} This reinforces the chain rule application from the prior turn."
             )
-            grading = GradingDetail(rubric_applied=problem.rubric, notes="Canonical answer accepted.")
+            grading = GradingDetail(
+                rubric_applied=problem.rubric, notes="Canonical answer accepted."
+            )
             return AssessmentResult(
                 problem=problem,
                 passed=True,
@@ -50,9 +52,7 @@ class AssessorAgent:
             notes = "Gradient check executed" if run_result.exit_code == 0 else "Execution failed"
             if max_rel_error is not None:
                 notes = f"Gradient check max relative error {max_rel_error:.2e}"
-            feedback = (
-                "Executed canonical gradient check. Review stdout for diagnostic details."
-            )
+            feedback = "Executed canonical gradient check. Review stdout for diagnostic details."
             grading = GradingDetail(rubric_applied=problem.rubric, notes=notes)
             return AssessmentResult(
                 problem=problem,

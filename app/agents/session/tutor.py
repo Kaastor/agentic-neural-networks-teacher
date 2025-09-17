@@ -65,4 +65,3 @@ def _summarize_fact(fact: CanonicalFact) -> str:
         f"{fact.title}: {fact.statement} This relationship is what lets us propagate gradients "
         "by composing local Jacobians."
     )
-

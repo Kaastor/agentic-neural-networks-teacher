@@ -7,13 +7,7 @@ from app.tooling.code_runner.models import CodeRunResponse
 from app.tooling.math.checks import check_symbolic_equality
 from app.tooling.math.models import EqualityCheckRequest
 
-from .messages import (
-    AssessmentResult,
-    CriticRequest,
-    CriticVerdict,
-    PlannerDecision,
-    TutorResponse,
-)
+from .messages import CriticRequest, CriticVerdict, PlannerDecision, TutorResponse
 
 
 class CriticAgent:
@@ -67,7 +61,8 @@ class CriticAgent:
         missing = required - citations
         if missing:
             issues.append(
-                "Tutor response omitted required canonical fact citations: " + ", ".join(sorted(missing))
+                "Tutor response omitted required canonical fact citations: "
+                + ", ".join(sorted(missing))
             )
         if tutor_response.prompt is None or not tutor_response.prompt.endswith("?"):
             issues.append("Tutor prompt must end with a Socratic question.")
@@ -76,9 +71,7 @@ class CriticAgent:
         available_fact_ids = {fact.id for fact in self._repository.get_canonical_facts(required)}
         unknown = citations - available_fact_ids
         if unknown:
-            issues.append(
-                "Tutor cited unknown canonical facts: " + ", ".join(sorted(unknown))
-            )
+            issues.append("Tutor cited unknown canonical facts: " + ", ".join(sorted(unknown)))
         if not tutor_response.explanation:
             issues.append("Tutor explanation is required for pedagogical scaffolding.")
         return issues

@@ -101,4 +101,3 @@ def test_session_orchestrator_generates_verified_transcript() -> None:
 
     # Tutor facts should be cached for reuse in later turns.
     assert "fact-chain-rule" in transcript.final_state.retrieved_facts
-
