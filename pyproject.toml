@@ -1,0 +1,61 @@
+[tool.poetry]
+name = "agentic-neural-networks-teacher"
+version = "0.1.0"
+description = "Agentic tutoring system for neural network fundamentals"
+authors = ["Przemek <noreply@example.com>"]
+license = "MIT"
+readme = "README.md"
+packages = [
+  { include = "app" },
+  { include = "services" }
+]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+fastapi = "^0.109.0"
+uvicorn = { extras = ["standard"], version = "^0.24.0" }
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^7.4.0"
+pytest-asyncio = "^0.21.0"
+ruff = "^0.1.4"
+black = "^23.10"
+mypy = "^1.6.1"
+pre-commit = "^3.4.0"
+httpx = "^0.25.0"
+
+[tool.pytest.ini_options]
+testpaths = ["app/tests"]
+addopts = "-q"
+
+[tool.black]
+line-length = 100
+target-version = ["py311"]
+
+[tool.ruff]
+line-length = 100
+src = ["app", "services", "tests"]
+target-version = "py311"
+select = [
+  "E",
+  "F",
+  "I",
+  "UP",
+  "B",
+  "W"
+]
+ignore = ["E203", "E501"]
+
+[tool.ruff.isort]
+known-first-party = ["app", "services"]
+
+[tool.mypy]
+python_version = "3.11"
+plugins = []
+strict = true
+warn_unreachable = true
+warn_unused_configs = true
+
+[build-system]
+requires = ["poetry-core>=1.6.1"]
+build-backend = "poetry.core.masonry.api"
