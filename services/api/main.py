@@ -2,9 +2,10 @@
 
 from __future__ import annotations
 
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException, Query
 
 from app.agents.hello_agent import HelloAgent, HelloAgentRequest, HelloAgentResponse
+from app.content import CONTENT_REPOSITORY, CanonicalFact, ConceptDetail
 
 app = FastAPI(
     title="Agentic Neural Networks Tutor",
@@ -27,3 +28,23 @@ def run_hello_agent(request: HelloAgentRequest) -> HelloAgentResponse:
     """Execute the hello agent and return its structured response."""
 
     return _hello_agent.run(request)
+
+
+@app.get("/concept/{concept_id}", response_model=ConceptDetail)
+def get_concept(concept_id: str) -> ConceptDetail:
+    """Return the fully expanded concept payload for curriculum consumption."""
+
+    detail = CONTENT_REPOSITORY.get_concept_detail(concept_id)
+    if detail is None:
+        raise HTTPException(status_code=404, detail=f"Concept '{concept_id}' not found.")
+    return detail
+
+
+@app.get("/facts", response_model=list[CanonicalFact])
+def get_canonical_facts(ids: list[str] = Query(default=..., min_items=1)) -> list[CanonicalFact]:
+    """Return canonical facts for the supplied identifiers."""
+
+    facts = CONTENT_REPOSITORY.get_canonical_facts(ids)
+    if not facts:
+        raise HTTPException(status_code=404, detail="No canonical facts found for supplied ids.")
+    return facts
