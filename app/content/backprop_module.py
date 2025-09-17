@@ -338,7 +338,8 @@ WORKED_EXAMPLES: list[WorkedExample] = [
         concept_id=CONCEPT_ID,
         title="Implementing a Gradient Checker",
         narrative=(
-            "We implement a gradient checker for a two-layer network and interpret its output."),
+            "We implement a gradient checker for a two-layer network and interpret its output."
+        ),
         steps=[
             "Flatten parameters into a single vector for ease of perturbation.",
             "For each parameter index, compute the central-difference estimate with a small epsilon.",
@@ -484,10 +485,12 @@ PROBLEM_TEMPLATES: list[ProblemTemplate] = [
                 variant_id="v1",
                 prompt=(
                     "Write a Python function `gradient_check(model, loss_fn, params, epsilon=1e-5)` that compares analytical "
-                    "gradients from `model.backward` with central-difference estimates. Return the maximum relative error."),
+                    "gradients from `model.backward` with central-difference estimates. Return the maximum relative error."
+                ),
                 solution=(
                     "Iterate over flattened parameters, perturb +epsilon and -epsilon, compute losses, and form the "
-                    "central difference. Compare to the analytical gradient and track the maximum relative error."),
+                    "central difference. Compare to the analytical gradient and track the maximum relative error."
+                ),
                 rubric="Unit tests expect iteration over parameters, central difference, and reporting of max relative error.",
                 unit_test_stub=(
                     "def test_gradient_check_returns_small_error():\n"
@@ -520,7 +523,8 @@ PROBLEM_TEMPLATES: list[ProblemTemplate] = [
                 ),
                 solution=(
                     "Likely causes include too large a learning rate or poor initialization leading to exploding gradients. "
-                    "Mitigations: apply gradient clipping, reduce learning rate, or use orthogonal initialization.") ,
+                    "Mitigations: apply gradient clipping, reduce learning rate, or use orthogonal initialization."
+                ),
                 rubric="Expect identification of gradient explosion and at least two concrete mitigation tactics.",
             )
         },
@@ -543,7 +547,8 @@ PROBLEM_TEMPLATES: list[ProblemTemplate] = [
                 template_id="pt-batch-matrix",
                 variant_id="v1",
                 prompt=(
-                    "For batch size B, derive matrix expressions for grad_W2 L and grad_W1 L in a two-layer MLP with ReLU.") ,
+                    "For batch size B, derive matrix expressions for grad_W2 L and grad_W1 L in a two-layer MLP with ReLU."
+                ),
                 solution=(
                     "With hidden activations H^1 (B x H) and deltas Delta^2 (B x O), gradients are grad_W2 L = (Delta^2)^T H^1 / B and "
                     "grad_W1 L = (Delta^1)^T X / B with Delta^1 = (Delta^2 W^2) hadamard indicator[Z^1 > 0]."
